@@ -81,6 +81,9 @@ Syntax: res.send(body);
 res.sendFile: Transfers the file at the given path. The path argument must be an absolute path to the file.
 Syntax: res.sendFile(path [, options] [, fn])
 
+res.json: Sends a JSON response. This method converts the parameter to a JSON string using JSON.stringify().
+Syntax: res.json(body);
+
 
 Express middleware: Express middleware are functions that execute during the lifecycle of a request to the
 Express server. Each middleware has access to the HTTP request and response for each route (or path) it's
