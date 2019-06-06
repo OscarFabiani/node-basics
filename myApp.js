@@ -22,6 +22,11 @@ Node.js Global Objects: objects that are available in all modules.
 
 __dirname: The direstory name of the current module.
 
+process: provides information about, and control over the current Node.js process.
+
+
+process.env: The process.env property returns an object containing the user environment.
+
 
 
 
@@ -125,6 +130,20 @@ EX:
 //This serves the object passed to res.json as a JSON string when a get request is sent to /json.
 app.get("/json", (req, res) => {res.json({name: "oscar"})});
 
+Adding an environment variable for use as a configuration:
+EX:
+//This sets an environment variable, then loads(?) middleware that checks if the environment variable
+//is set to "true" and serves "test" if so, otherwise calls next.
+process.env.TEST = "true";
+app.get("/json", (req, res, next) => {
+  if (process.env.TEST == "true") {
+    res.send("test");
+  } else {
+    next();
+  }
+})
+
+
 
 
 
@@ -156,25 +175,50 @@ app.get("/", (req, res) => {res.sendFile(indexPath)});
 let publicPath = __dirname + "/public"
 app.use(express.static(publicPath));
 
-let data = {
-  name: "Oscar"
-}
+let data1 = { name: "Oscar" };
+let data2 = { name: "Jess" };
+let data3 = { name: "Tofu" };
 
 //app.get("/json", (req, res) => {res.json(data)});
 
 process.env.MESSAGE_STYLE = "uppercase";
-console.log(process.env.MESSAGE_STYLE);
 
 let jsonHandler = (req, res) => {
   if (process.env.MESSAGE_STYLE == "uppercase") {
-    data.name = data.name.toUpperCase();
+    data1.name = data1.name.toUpperCase();
   }
-  res.json(data);
+  res.json(data1);
 }
 
-app.get("/json", jsonHandler);
+app.get("/json1", jsonHandler);
 
-app.get("/json2", (req, res) => {res.json({name: "jess"})});
+app.get("/json2", (req, res) => {res.json(data2)});
+
+process.env.TOFU = "true"; //the value assigned must be a string
+//NOTE: While this version of NODE (10.13) would convert a boolean to a string, future versions of Node
+//may throw an error. 
+app.get("/json3", (req, res) => {
+  if (process.env.TOFU == "true") { //true must be a string in this case
+    console.log('its true');
+    res.json(data3);
+  } else {
+    res.json(data1);
+  }
+});
+
+
+process.env.TEST = "true";
+app.get("/json", (req, res, next) => {
+  if (process.env.TEST == "true") {
+    res.send("test");
+  } else {
+    next();
+  }
+})
+
+app.get("/json", (req, res) => {
+  res.send("not a test");
+})
 
 
 
