@@ -16,6 +16,11 @@ path: a module for working with directory and file paths.
 assert (Assertion Testing): a module that checks code against prescribed constraints.
 
 
+Node.js Global Objects: objects that are available in all modules.
+
+__dirname: The direstory name of the current module.
+
+
 Express: Express is a popular module/library/framework that runs between the server created by Node.js and the
 frontend pages of a web application. Express also handles an application's routing. Routing directs users to the
 correct page based on their interaction with the application.
@@ -62,8 +67,11 @@ HTTP request.
 
 Response Object Methods:
 
-Send: Sends the HTTP response.
+res.send: Sends the HTTP response.
 Syntax: res.send(body);
+
+res.sendFile: Transfers the file at the given path. The path argument must be an absolute path to the file.
+Syntax: res.sendFile(path [, options] [, fn])
 
 
 Serving a response string to GET requests matching the root "/" path:
