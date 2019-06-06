@@ -2,6 +2,8 @@
 
 This file explores the basics of Node and Express.
 
+
+
 Node.js: Node.js is a JavaScript tool that allows developers to write backend (server-side) programs in
 JavaScript. Node.js comes with built-in modules (small, independent programs) that help facilitate this
 purpose.
@@ -21,6 +23,8 @@ Node.js Global Objects: objects that are available in all modules.
 __dirname: The direstory name of the current module.
 
 
+
+
 Express: Express is a popular module/library/framework that runs between the server created by Node.js and the
 frontend pages of a web application. Express also handles an application's routing. Routing directs users to the
 correct page based on their interaction with the application.
@@ -33,12 +37,23 @@ App object: The app object conventionally denotes the Express application.
 
 App Methods:
 
-Listen method: The listen() method tells your server to listen on a given port, putting it in a running state.
+Listen method: The app.listen() method tells your server to listen on a given port, putting it in a running state.
 NOTE: This method is identical to Node's http.Server.listen().
 Syntax: app.listen([port[, host[, backlog]]][, callback])
 EX:
 //This tells the server to listen to port 3000 and includes a callback function that logs a message to the console.
 app.listen(3000, () => {console.log('app is listening on port 3000')});
+
+Use method: The app.use() method mounts middleware function(s) at a specified path.
+NOTE: If path is omitted, it defaults to root.
+Syntax: app.use([path,] callback [, callback...])
+EX:
+//This calls a function that logs a meggage before passing on to next whenever an HTTP request is made
+//on the root path.
+app.use((req, res, next) => {
+  console.log("middleware called");
+  next();
+});
 
 
 Routing Methods: Routing methods route http requests There are many, but the most common are get and post.
@@ -107,9 +122,9 @@ const app = express()
 //This is an example of middleware which doesn't set a path (which defaults to root) and calls a function
 //that logs the time before passing the HTTP request on the the next function.
 app.use((req, res, next) => {
-  console.log('Time:', Date.now())
-  next()
-})
+  console.log('test middleware called');
+  next();
+});
 
 //app.get('/', function (req, res) {
   //res.send('Hello World')
