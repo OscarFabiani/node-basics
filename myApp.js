@@ -163,8 +163,11 @@ app.get("/json", (req, res, next) => {
 */
 
 //import express from 'express';
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+
+
 
 //This is an example of middleware which doesn't set a path (which defaults to root) and calls a function
 //that logs the time before passing the HTTP request on the the next function.
@@ -174,6 +177,8 @@ app.use((req, res, next) => {
   console.log('test middleware called');
   next();
 });
+
+app.use(bodyParser.urlencoded({extended: false}));
 
 //app.get('/', function (req, res) {
   //res.send('Hello World')
@@ -250,7 +255,9 @@ app.get("/:word/echo/", (req, res) => {
 //This uses query parameters (?param=value&param=value) and serves their values.
 //NOTE: A working query would be: /name?first=<firstname>&last=<lastname>
 app.get("/name", (req, res) => {
-  res.send(req.query.first, req.query.last);
+  let first = req.query.first;
+  let last = req.query.last;
+  res.send(first + ' ' + last);
 })
 
 
