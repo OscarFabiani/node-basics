@@ -78,7 +78,7 @@ Syntax: function (req, res) {...}
 Response Object (res): The res object represents the HTTP response that an Express app sends when it gets an
 HTTP request.
 
-Response Object Methods:
+Response object methods:
 
 res.send: Sends the HTTP response.
 Syntax: res.send(body);
@@ -88,6 +88,18 @@ Syntax: res.sendFile(path [, options] [, fn])
 
 res.json: Sends a JSON response. This method converts the parameter to a JSON string using JSON.stringify().
 Syntax: res.json(body);
+
+
+Request object (req): the req object represents the HTTP request and has properties for the request query
+string, parameters, body, HTTP headers, etc.
+
+Request object properties:
+
+req.ip: Contains the remote IP address of the request.
+
+req.method: Contains a string corresponding to the HTTP method of the request: GET, POST, PUT, etc.
+
+req.path: Contains the path part of the request URL.
 
 
 Express middleware: Express middleware are functions that execute during the lifecycle of a request to the
@@ -132,8 +144,8 @@ app.get("/json", (req, res) => {res.json({name: "oscar"})});
 
 Adding an environment variable for use as a configuration:
 EX:
-//This sets an environment variable, then loads(?) middleware that checks if the environment variable
-//is set to "true" and serves "test" if so, otherwise calls next.
+//This sets an environment variable, then mounts middleware on the "/json" route that checks if
+//the environment variable is set to "true" and serves "test" if so, otherwise calls next.
 process.env.TEST = "true";
 app.get("/json", (req, res, next) => {
   if (process.env.TEST == "true") {
@@ -221,6 +233,25 @@ app.get("/json", (req, res) => {
 })
 
 
+app.get("/now", (req, res, next) => {
+  req.time = new Date().toString();
+  next();
+}, (req, res, next) => {
+  res.json({time: req.time});
+});
+
+
+//This uses a route parameter (:param) and serves it by accessing req.params.
+app.get("/:word/echo/", (req, res) => {
+  res.send(req.params.word);
+})
+
+
+//This uses query parameters (?param=value&param=value) and serves their values.
+//NOTE: A working query would be: /name?first=<firstname>&last=<lastname>
+app.get("/name", (req, res) => {
+  res.send(req.query.first, req.query.last);
+})
 
 
 
