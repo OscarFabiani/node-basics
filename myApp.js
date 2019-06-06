@@ -29,14 +29,7 @@ correct page based on their interaction with the application.
 Express methods: Some common Express methods are listen(), get(), and post().
 
 
-App object: The app object conventionally denotes the Express application
-
-Creating an Express app object: After requiring or importing express, an Express app object can be created
-by setting a variable to an instance of express().
-EX:
-const express = require('express');
-const app = express();
-
+App object: The app object conventionally denotes the Express application.
 
 App Methods:
 
@@ -74,6 +67,22 @@ res.sendFile: Transfers the file at the given path. The path argument must be an
 Syntax: res.sendFile(path [, options] [, fn])
 
 
+Express middleware: Express middleware are functions that execute during the lifecycle of a request to the
+Express server. Each middleware has access to the HTTP request and response for each route (or path) it's
+attached to. Express middleware can either terminate the HTTP request or pass it on to another middleware
+function using next. This is called chaining middleware.
+Syntax: 
+
+
+
+
+
+Creating an Express app object: After requiring or importing express, an Express app object can be created
+by setting a variable to an instance of express().
+EX:
+const express = require('express');
+const app = express();
+
 Serving a response string to GET requests matching the root "/" path:
 EX:
 //This serves a string response when an HTTP request is made on the root path.
@@ -95,6 +104,12 @@ app.get("/",(req, res) => {res.sendFile(__dirname + "/index.html")});
 const express = require('express')
 const app = express()
 
+//This is an example of middleware which doesn't set a path (which defaults to root) and calls a function
+//that logs the time before passing the HTTP request on the the next function.
+app.use((req, res, next) => {
+  console.log('Time:', Date.now())
+  next()
+})
 
 //app.get('/', function (req, res) {
   //res.send('Hello World')
@@ -125,6 +140,8 @@ let jsonHandler = (req, res) => {
 }
 
 app.get("/json", jsonHandler);
+
+
 
 
 app.listen(3000, () => {console.log('app is listening on port 3000')});
