@@ -1,0 +1,14 @@
+{
+  "name": "node-basics",
+  "version": "1.0.0",
+  "description": "A test project for Node.js basics",
+  "main": "myApp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oscar Fabiani",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
