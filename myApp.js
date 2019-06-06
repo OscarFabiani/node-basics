@@ -78,6 +78,14 @@ Syntax: function (req, res) {...}
 Response Object (res): The res object represents the HTTP response that an Express app sends when it gets an
 HTTP request.
 
+Respponse object properties:
+
+req.params: INPUT
+
+req.query: INPUT
+
+res.body: INPUT
+
 Response object methods:
 
 res.send: Sends the HTTP response.
@@ -258,6 +266,14 @@ app.get("/name", (req, res) => {
   let first = req.query.first;
   let last = req.query.last;
   res.send(first + ' ' + last);
+})
+
+
+//This mounts a post handler to the "/name" path that serves parameters from req.body.
+app.post("/name", (req, res) => {
+  let first = req.body.first;
+  let last = req.body.last;
+  res.send(first + " " + last);
 })
 
 
