@@ -120,6 +120,11 @@ EX:
 NOTE: This assumes there is an index.html file at the root path of the project.
 app.get("/",(req, res) => {res.sendFile(__dirname + "/index.html")});
 
+Serving JSON data as a response to a GET request:
+EX:
+//This serves the object passed to res.json as a JSON string when a get request is sent to /json.
+app.get("/json", (req, res) => {res.json({name: "oscar"})});
+
 
 
 
@@ -168,6 +173,9 @@ let jsonHandler = (req, res) => {
 }
 
 app.get("/json", jsonHandler);
+
+app.get("/json2", (req, res) => {res.json({name: "jess"})});
+
 
 
 
