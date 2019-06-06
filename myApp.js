@@ -86,7 +86,15 @@ Express middleware: Express middleware are functions that execute during the lif
 Express server. Each middleware has access to the HTTP request and response for each route (or path) it's
 attached to. Express middleware can either terminate the HTTP request or pass it on to another middleware
 function using next. This is called chaining middleware.
-Syntax: 
+Syntax: function(req, res, next) {...};
+
+Express built in middleware:
+
+express.static: Serves static files.
+Syntax: express.static(root, [options])
+EX:
+//This serves assets in the /public directory. These assets will appear mounted to the root directory.
+app.use(express.static(__dirname + "/public"))
 
 
 
@@ -121,6 +129,8 @@ const app = express()
 
 //This is an example of middleware which doesn't set a path (which defaults to root) and calls a function
 //that logs the time before passing the HTTP request on the the next function.
+//NOTE: This needs to be before the next app.get middleware since that function responds to the request
+//ending the chain.
 app.use((req, res, next) => {
   console.log('test middleware called');
   next();
