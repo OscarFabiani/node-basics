@@ -79,6 +79,12 @@ EX:
 //This serves a string response when an HTTP request is made on the root path.
 app.get("/",(req, res) => {res.send("Hello Express")});
 
+Serving a response HTML file to GET requests matching the root "/" path.
+EX:
+//This serves an HTML file at the specifies path when an HTTP request is made on the root path.
+NOTE: This assumes there is an index.html file at the root path of the project.
+app.get("/",(req, res) => {res.sendFile(__dirname + "/index.html")});
+
 
 
 
