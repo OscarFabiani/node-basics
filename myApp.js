@@ -29,6 +29,12 @@ process properties:
 process.env: The process.env property returns an object containing the user environment.
 
 
+---
+IncomingMessage object:
+
+message.headers: The request/response headers object containing key-value pairs of header names and values.
+
+
 
 
 EXPRESS: Express is a popular module/library/framework that runs between the server created by Node.js and the
@@ -421,6 +427,16 @@ app.get("/api/timestamp/:date?", (req, res) => {
       };
   res.json(response);
 });
+
+
+//This responds with a JSON object containing an ip address and information from the Node core property headers.
+app.get('/api/whoami', (req, res) => {
+  res.json({
+    ipaddress: req.ip,
+    languege: req.headers["accept-language"],
+    software: req.headers["user-agent"]
+  })
+})
 
 
 app.listen(3000, () => {console.log('app is listening on port 3000')});
