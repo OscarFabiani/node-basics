@@ -24,32 +24,66 @@ __dirname: The direstory name of the current module.
 
 process: provides information about, and control over the current Node.js process.
 
+process properties:
 
 process.env: The process.env property returns an object containing the user environment.
 
 
 
 
-Express: Express is a popular module/library/framework that runs between the server created by Node.js and the
+EXPRESS: Express is a popular module/library/framework that runs between the server created by Node.js and the
 frontend pages of a web application. Express also handles an application's routing. Routing directs users to the
 correct page based on their interaction with the application.
 
 
-Express methods: Some common Express methods are listen(), get(), and post().
+Express middleware: Express middleware are functions that execute during the lifecycle of a request to the
+Express server. Each middleware has access to the HTTP request and response for each route (or path) it's
+attached to. Express middleware can either terminate the HTTP request or pass it on to another middleware
+function using next. This is called chaining middleware.
+Syntax: function(req, res, next) {...};
+
+Chaning middleware: Express middleware can be chained (also called creating a middleware sub-stack) when
+being mounted. This is useful to split server operations into smaller units for better app structure and
+the possibility to reuse code indifferent places. This process, known as the request-response cycle, can
+be stopped by a middlware responding to a request or passing the request with next(). In the case of
+middleware mounted using app.METHOD(), next("route") can be called to terminate the call stack and pass
+the request on to the next route.
+NOTE: There is at least 1 other way to terminate the request-response cycle (pass to error handler).
+EX:
+app.use((req, res, next) => {...; next()}, (req, res, next) {...; next()});
+
+
+Express built in middleware methods:
+
+express.static: Serves static files.
+Syntax: express.static(root, [options])
+EX:
+//This serves assets in the /public directory. These assets will appear mounted to the root directory.
+app.use(express.static(__dirname + "/public"))
+
+express.json: Parses incoming reqests with JSON payloads and is based on body-parser.
+Syntax: express.json([options]);
+
+express.urlencoded: Parses incoming requests with urlencoded payloads and is based on body-parser.
+Syntax: express.urlencoded([options]);
+
+express.Router: Creates a new router object.
+Syntax: express.Router([options]);
+
 
 
 App object: The app object conventionally denotes the Express application.
 
 App Methods:
 
-Listen method: The app.listen() method tells your server to listen on a given port, putting it in a running state.
+app.listen: The app.listen() method tells your server to listen on a given port, putting it in a running state.
 NOTE: This method is identical to Node's http.Server.listen().
 Syntax: app.listen([port[, host[, backlog]]][, callback])
 EX:
 //This tells the server to listen to port 3000 and includes a callback function that logs a message to the console.
 app.listen(3000, () => {console.log('app is listening on port 3000')});
 
-Use method: The app.use() method mounts middleware function(s) at a specified path.
+app.use(): The app.use() method mounts middleware function(s) at a specified path.
 NOTE: If path is omitted, it defaults to root.
 Syntax: app.use([path,] callback [, callback...])
 EX:
@@ -59,6 +93,14 @@ app.use((req, res, next) => {
   console.log("middleware called");
   next();
 });
+
+app.METHOD(): Routs an HTTP Routes an HTTP request, where METHOD is the HTTP method of the request, such as GET,
+PUT, POST, etc., in lowercase. Thus, the actual methods are app.get(), app.post(), app.put(), etc.
+Syntax: app.METHOD(path, callback [, callback ...]);
+
+app.route(): Returns an instance of a single route, which can then be used to handle HTTP verbs with optional
+middleware. app.route() can avoid duplicate route names (and thus typo errors).
+Syntax: app.route(path);
 
 
 ROUTING: Routing refers to how an application's endpoints (URIs) respond to client requests.
@@ -70,17 +112,17 @@ Syntax: app.METHOD(PATH, HANDLER) or app.METHOD(path, callback [, callback ...])
 METHOD is an http method in lowercase, PATH is a relative path on the server, and HANDLER is a route handler
 function that Express calls when the route is matched.
 
-Get Method: Routes HTTP GET requests to the specified path with the specified callback functions.
+app.get(): Routes HTTP GET requests to the specified path with the specified callback functions.
 Syntax: app.get(PATH, HANDLER) or app.get(path, callback)
 
+app.post(): Routes HTTP POST requests to the specified path with the specified callback functions.
+Syntax: app.post(path, callback [, callback ...]);
 
 Route Paths: Route paths, in combination with a request method, define the endpoints at which requests can
 be made.
 
-
 Route handlers: Route handler functions are middleware called when a route method's PATH is matched and take
 a request object and response object as parameters.
-
 
 Route Parameters: Route parameters are named URL segments that are used to capture the value specified at their
 positon in the URL. The captured values are populated in the req.params object, with the name of the route
@@ -89,32 +131,6 @@ EX:
 Route path: /users/:userId/names/:name
 Request URL: http://localhost:3000/users/1/names/oscar
 req.params: {"userId": "1", "name": "oscar"}
-
-
-
-Express middleware: Express middleware are functions that execute during the lifecycle of a request to the
-Express server. Each middleware has access to the HTTP request and response for each route (or path) it's
-attached to. Express middleware can either terminate the HTTP request or pass it on to another middleware
-function using next. This is called chaining middleware.
-Syntax: function(req, res, next) {...};
-
-
-Response Object (res): The res object represents the HTTP response that an Express app sends when it gets an
-HTTP request.
-
-Response object methods:
-
-res.send: Sends the HTTP response.
-Syntax: res.send(body);
-
-res.sendFile: Transfers the file at the given path. The path argument must be an absolute path to the file.
-Syntax: res.sendFile(path [, options] [, fn])
-
-res.json: Sends a JSON response. This method converts the parameter to a JSON string using JSON.stringify().
-Syntax: res.json(body);
-
-res.end: Ends the response process without any data.
-NOTE: this method comes from Node core (response.end() method fo http.ServerResponse).
 
 
 Request object (req): the req object represents the HTTP request and has properties for the request query
@@ -143,39 +159,50 @@ req.method: Contains a string corresponding to the HTTP method of the request: G
 req.path: Contains the path part of the request URL.
 
 
-Express built in middleware:
+Response Object (res): The res object represents the HTTP response that an Express app sends when it gets an
+HTTP request.
 
-express.static: Serves static files.
-Syntax: express.static(root, [options])
-EX:
-//This serves assets in the /public directory. These assets will appear mounted to the root directory.
-app.use(express.static(__dirname + "/public"))
+Response object methods:
 
+res.send: Sends the HTTP response.
+Syntax: res.send(body);
 
-Chaning middleware: Express middleware can be chained (also called creating a middleware sub-stack) when
-being mounted. This is useful to split server operations into smaller units for better app structure and
-the possibility to reuse code indifferent places. This process, known as the request-response cycle, can
-be stopped by a middlware responding to a request or passing the request with next(). In the case of
-middleware mounted using app.METHOD(), next("route") can be called to terminate the call stack and pass
-the request on to the next route.
-NOTE: There is at least 1 other way to terminate the request-response cycle (pass to error handler).
-EX:
-app.use((req, res, next) => {...; next()}, (req, res, next) {...; next()});
+res.sendFile: Transfers the file at the given path. The path argument must be an absolute path to the file.
+Syntax: res.sendFile(path [, options] [, fn])
+
+res.json: Sends a JSON response. This method converts the parameter to a JSON string using JSON.stringify().
+Syntax: res.json(body);
+
+res.end: Ends the response process without any data.
+NOTE: this method comes from Node core (response.end() method fo http.ServerResponse).
 
 
 
-body-parser: Body parser is a middleware that parses incoming request bodies before handlers, available under
-the req.body property. This packaage has 4 middlewares which parse JSON, raw, text, and URL-encoded form. Body
-parser basically intercepts these types of request bodies and parses them before populating the req.body
-property with the result for access within routes.
-NOTE: Frameworks other than Express (which are not as minimalistic) have this functionality included.
-EX:
+
+
+body-parser: Body parser is a middleware that parses incoming request bodies before handlers, and makes them 
+available under the req.body property. This packaage has 4 middlewares which parse JSON, raw, text, and
+URL-encoded form. Body parser basically intercepts these types of request bodies and parses them before
+populating the req.body property with the result for access within routes. The req.body property would not
+be accessible without parsing the raw content of an HTTP post request.
+NOTE: WHILE BODY PARSER WAS REMOVES FROM CORE EXPRESS, IT HAS SINCE BEEN RE-ADDED. THIS ELIMINATES THE NEED
+TO INSTALL IT AS A SEPERATE PACKAGE.
+EX1:
+//This example shows how to incorporate body parser when it was removed from core Express.
 const bodyParser = require('body-parser');
 //This parses application/x-www-form-urlencoded body types for all requests.
 //NOTE: extend: false is an option that defaults to true but has been deprecated as JSON does it better.
 app.use(bodyParser.urlencoded({ extended: false }))
 //This parses application/json body types for all requests.
 app.use(bodyParser.json())
+EX2:
+//This example shows how to use body-parser with body-parser included in core Express.
+//This parses application/x-www-form-urlencoded body types for all requests.
+//NOTE: extend: false is an option that defaults to true but has been deprecated as JSON does it better.
+app.use(express.urlencoded({ extended: false }))
+//This parses application/json body types for all requests.
+app.use(express.json())
+
 
 
 
@@ -234,7 +261,7 @@ app.get('/name', (req, res) => {
 //import express from 'express';
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 
 
 
@@ -247,7 +274,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: false}));
 
 //app.get('/', function (req, res) {
   //res.send('Hello World')
@@ -337,6 +364,8 @@ app.get("/:word/echo/", (req, res) => {
   res.send(req.params.word);
 })
 
+/*
+//The following example makes these examples redundant. 
 
 //This uses query parameters (?param=value&param=value) and serves their values.
 //NOTE: A working query would be: /name?first=<firstname>&last=<lastname>
@@ -347,16 +376,25 @@ app.get("/name", (req, res) => {
 })
 
 
-//This mounts a post handler to the "/name" path that serves parameters from req.body (which is made
-//available by body-parser).
+//This mounts a post handler to the "/name" path that serves parameters from req.body (which is
+//parsed by body-parser).
 app.post("/name", (req, res) => {
+  console.log(req.body);
   let first = req.body.first;
   let last = req.body.last;
   res.send(first + " " + last);
 })
+*/
 
-
-
+//This example uses app.route() to handle get and post for '/name', replicating the functionlaity of the
+//examples above with the exception of changing the res to json.
+app.route('/name')
+  .get((req, res) => {
+    res.json({first: req.query.first, last: req.query.last});
+  })
+  .post((req, res) => {
+    res.json({first: req.body.first, last: req.body.last});
+  })
 
 
 
