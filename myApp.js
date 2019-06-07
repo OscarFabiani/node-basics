@@ -82,16 +82,41 @@ Route handlers: Route handler functions are middleware called when a route metho
 a request object and response object as parameters.
 
 
+Route Parameters: Route parameters are named URL segments that are used to capture the value specified at their
+positon in the URL. The captured values are populated in the req.params object, with the name of the route
+parameter specified in the path as their respective keys.
+EX:
+Route path: /users/:userId/names/:name
+Request URL: http://localhost:3000/users/1/names/oscar
+req.params: {"userId": "1", "name": "oscar"}
+
+
+
+Express middleware: Express middleware are functions that execute during the lifecycle of a request to the
+Express server. Each middleware has access to the HTTP request and response for each route (or path) it's
+attached to. Express middleware can either terminate the HTTP request or pass it on to another middleware
+function using next. This is called chaining middleware.
+Syntax: function(req, res, next) {...};
+
 Response Object (res): The res object represents the HTTP response that an Express app sends when it gets an
 HTTP request.
 
 Respponse object properties:
 
-req.params: INPUT
+req.params: An object containing properties mapped to the named route parameters.
 
-req.query: INPUT
+req.query: An object containing a property for each query string parameter in the route. If there is no query
+string it is an empt object ({}).
+NOTE: Query strings (or query components) are a URi standard outside the scope of Node and Express. These begin
+with a ? and, by convention, include field=value couples seperated by an ampersand (&).
+EX:
+Route path: '/name'
+Request URL: '/name?first=oscar&last=f' 
+req.query: {first: 'oscar', last: 'f'}
 
-res.body: INPUT
+res.body: Contains key-value pairs of data submitted in the request nody. By default, it is undefined, and is
+populated when you use body-parsing middleware such as express.json(), express.urlencoded(), or the body-parser
+package.
 
 Response object methods:
 
@@ -103,6 +128,9 @@ Syntax: res.sendFile(path [, options] [, fn])
 
 res.json: Sends a JSON response. This method converts the parameter to a JSON string using JSON.stringify().
 Syntax: res.json(body);
+
+res.end: Ends the response process without any data.
+NOTE: this method comes from Node core (response.end() method fo http.ServerResponse).
 
 
 Request object (req): the req object represents the HTTP request and has properties for the request query
@@ -116,12 +144,6 @@ req.method: Contains a string corresponding to the HTTP method of the request: G
 
 req.path: Contains the path part of the request URL.
 
-
-Express middleware: Express middleware are functions that execute during the lifecycle of a request to the
-Express server. Each middleware has access to the HTTP request and response for each route (or path) it's
-attached to. Express middleware can either terminate the HTTP request or pass it on to another middleware
-function using next. This is called chaining middleware.
-Syntax: function(req, res, next) {...};
 
 Express built in middleware:
 
@@ -179,6 +201,14 @@ app.get("/json", (req, res, next) => {
   } else {
     next();
   }
+})
+
+Get query parameter input from client:
+//Assumes ?first=<firstname>&last=<lastname>
+app.get('/name', (req, res) => {
+  let first = req.query.first;
+  let last = req.query.last;
+  res.send(first + ' ' + last);
 })
 
 
@@ -264,12 +294,29 @@ app.get("/json", (req, res) => {
 })
 
 
+//This is an example of chaining middleware.
 app.get("/now", (req, res, next) => {
   req.time = new Date().toString();
   next();
 }, (req, res, next) => {
   res.json({time: req.time});
 });
+
+//This mounts a chain of middleware to '/user/:id' that ckecks if id is 0 and passes the request to the
+//next route if so, otherwise passes to the next middleware in the chain which sends 'regular'.
+app.get('/user/:id', (req, res, next) => {
+  // if the user ID is 0, skip to the next route
+  if (req.params.id === '0') next('route')
+  // otherwise pass the control to the next middleware function in this stack
+  else next()
+}, (req, res, next) => {
+  // send a regular response
+  res.send('regular')
+})
+// handler for the /user/:id path, which sends a special response
+app.get('/user/:id', (req, res, next) => {
+  res.send('special')
+})
 
 
 //This uses a route parameter (:param) and serves it by accessing req.params.
@@ -297,22 +344,6 @@ app.post("/name", (req, res) => {
 
 
 
-//This mounts a chain f middleware to '/user/:id' that ckecks if id is 0 and passes the request to the
-//next route if so, otherwise passes to the next middleware in the chain which sends 'regular'.
-app.get('/user/:id', (req, res, next) => {
-  // if the user ID is 0, skip to the next route
-  if (req.params.id === '0') next('route')
-  // otherwise pass the control to the next middleware function in this stack
-  else next()
-}, (req, res, next) => {
-  // send a regular response
-  res.send('regular')
-})
-
-// handler for the /user/:id path, which sends a special response
-app.get('/user/:id', (req, res, next) => {
-  res.send('special')
-})
 
 
 
