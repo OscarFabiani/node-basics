@@ -61,7 +61,11 @@ app.use((req, res, next) => {
 });
 
 
-Routing Methods: Routing methods route http requests There are many, but the most common are get and post.
+ROUTING: Routing refers to how an application's endpoints (URIs) respond to client requests.
+
+Routing Methods: Routing methods route http requests. There are many, but the most common are get and post.
+These routing methods specify a callback (handler functions) called when the application recieves a request
+to the specified route (endpoint) and HTTP method.
 Syntax: app.METHOD(PATH, HANDLER) or app.METHOD(path, callback [, callback ...])
 METHOD is an http method in lowercase, PATH is a relative path on the server, and HANDLER is a route handler
 function that Express calls when the route is matched.
@@ -70,9 +74,12 @@ Get Method: Routes HTTP GET requests to the specified path with the specified ca
 Syntax: app.get(PATH, HANDLER) or app.get(path, callback)
 
 
-Route handlers: Route handler functions are called when a route method's PATH is matched and take a request
-object and response object as parameters.
-Syntax: function (req, res) {...}
+Route Paths: Route paths, in combination with a request method, define the endpoints at which requests can
+be made.
+
+
+Route handlers: Route handler functions are middleware called when a route method's PATH is matched and take
+a request object and response object as parameters.
 
 
 Response Object (res): The res object represents the HTTP response that an Express app sends when it gets an
@@ -131,6 +138,7 @@ the possibility to reuse code indifferent places. This process, known as the req
 be stopped by a middlware responding to a request or passing the request with next(). In the case of
 middleware mounted using app.METHOD(), next("route") can be called to terminate the call stack and pass
 the request on to the next route.
+NOTE: There is at least 1 other way to terminate the request-response cycle (pass to error handler).
 EX:
 app.use((req, res, next) => {...; next()}, (req, res, next) {...; next()});
 
