@@ -125,6 +125,13 @@ EX:
 app.use(express.static(__dirname + "/public"))
 
 
+Chaning middleware: Express middleware can be chained (also called creating a middleware sub-stack) when
+being mounted. This is useful to split server operations into smaller units for better app structure and
+the possibility to reuse code indifferent places:
+EX:
+app.use((req, res, next) => {...; next()}, (req, res, next) {...; next()});
+
+
 
 
 
@@ -269,7 +276,8 @@ app.get("/name", (req, res) => {
 })
 
 
-//This mounts a post handler to the "/name" path that serves parameters from req.body.
+//This mounts a post handler to the "/name" path that serves parameters from req.body (which is made
+//available by body-parser).
 app.post("/name", (req, res) => {
   let first = req.body.first;
   let last = req.body.last;
