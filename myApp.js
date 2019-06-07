@@ -98,24 +98,9 @@ attached to. Express middleware can either terminate the HTTP request or pass it
 function using next. This is called chaining middleware.
 Syntax: function(req, res, next) {...};
 
+
 Response Object (res): The res object represents the HTTP response that an Express app sends when it gets an
 HTTP request.
-
-Respponse object properties:
-
-req.params: An object containing properties mapped to the named route parameters.
-
-req.query: An object containing a property for each query string parameter in the route. If there is no query
-string it is an empt object ({}).
-NOTE: Query strings (or query components) are a URi standard outside the scope of Node and Express. These begin
-with a ? and, by convention, include field=value couples seperated by an ampersand (&).
-EX:
-Route path: '/name'
-Request URL: '/name?first=oscar&last=f' 
-req.query: {first: 'oscar', last: 'f'}
-
-res.body (payload): Contains key-value pairs of data submitted in the request nody. By default, it is undefined,
-and is populated when you use body-parsing middleware such as express.json() or express.urlencoded().
 
 Response object methods:
 
@@ -136,6 +121,20 @@ Request object (req): the req object represents the HTTP request and has propert
 string, parameters, body, HTTP headers, etc.
 
 Request object properties:
+
+req.body: Contains key-value pairs of data submitted in the request nody. By default, it is undefined,
+and is populated when you use body-parsing middleware such as express.json() or express.urlencoded().
+
+req.params: An object containing properties mapped to the named route parameters.
+
+req.query: An object containing a property for each query string parameter in the route. If there is no query
+string it is an empt object ({}).
+NOTE: Query strings (or query components) are a URi standard outside the scope of Node and Express. These begin
+with a ? and, by convention, include field=value couples seperated by an ampersand (&).
+EX:
+Route path: '/name'
+Request URL: '/name?first=oscar&last=f' 
+req.query: {first: 'oscar', last: 'f'}
 
 req.ip: Contains the remote IP address of the request.
 
@@ -166,10 +165,17 @@ app.use((req, res, next) => {...; next()}, (req, res, next) {...; next()});
 
 
 body-parser: Body parser is a middleware that parses incoming request bodies before handlers, available under
-the req.body property. This packaage has 4 middlewares which are JSON, raw, text, and URL-encoded form. Body
+the req.body property. This packaage has 4 middlewares which parse JSON, raw, text, and URL-encoded form. Body
 parser basically intercepts these types of request bodies and parses them before populating the req.body
-property with the result.
+property with the result for access within routes.
 NOTE: Frameworks other than Express (which are not as minimalistic) have this functionality included.
+EX:
+const bodyParser = require('body-parser');
+//This parses application/x-www-form-urlencoded body types for all requests.
+//NOTE: extend: false is an option that defaults to true but has been deprecated as JSON does it better.
+app.use(bodyParser.urlencoded({ extended: false }))
+//This parses application/json body types for all requests.
+app.use(bodyParser.json())
 
 
 
