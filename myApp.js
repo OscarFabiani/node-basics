@@ -114,9 +114,8 @@ Route path: '/name'
 Request URL: '/name?first=oscar&last=f' 
 req.query: {first: 'oscar', last: 'f'}
 
-res.body: Contains key-value pairs of data submitted in the request nody. By default, it is undefined, and is
-populated when you use body-parsing middleware such as express.json(), express.urlencoded(), or the body-parser
-package.
+res.body (payload): Contains key-value pairs of data submitted in the request nody. By default, it is undefined,
+and is populated when you use body-parsing middleware such as express.json() or express.urlencoded().
 
 Response object methods:
 
@@ -163,6 +162,14 @@ the request on to the next route.
 NOTE: There is at least 1 other way to terminate the request-response cycle (pass to error handler).
 EX:
 app.use((req, res, next) => {...; next()}, (req, res, next) {...; next()});
+
+
+
+body-parser: Body parser is a middleware that parses incoming request bodies before handlers, available under
+the req.body property. This packaage has 4 middlewares which are JSON, raw, text, and URL-encoded form. Body
+parser basically intercepts these types of request bodies and parses them before populating the req.body
+property with the result.
+NOTE: Frameworks other than Express (which are not as minimalistic) have this functionality included.
 
 
 
