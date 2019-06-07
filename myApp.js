@@ -127,7 +127,10 @@ app.use(express.static(__dirname + "/public"))
 
 Chaning middleware: Express middleware can be chained (also called creating a middleware sub-stack) when
 being mounted. This is useful to split server operations into smaller units for better app structure and
-the possibility to reuse code indifferent places:
+the possibility to reuse code indifferent places. This process, known as the request-response cycle, can
+be stopped by a middlware responding to a request or passing the request with next(). In the case of
+middleware mounted using app.METHOD(), next("route") can be called to terminate the call stack and pass
+the request on to the next route.
 EX:
 app.use((req, res, next) => {...; next()}, (req, res, next) {...; next()});
 
@@ -282,6 +285,25 @@ app.post("/name", (req, res) => {
   let first = req.body.first;
   let last = req.body.last;
   res.send(first + " " + last);
+})
+
+
+
+//This mounts a chain f middleware to '/user/:id' that ckecks if id is 0 and passes the request to the
+//next route if so, otherwise passes to the next middleware in the chain which sends 'regular'.
+app.get('/user/:id', (req, res, next) => {
+  // if the user ID is 0, skip to the next route
+  if (req.params.id === '0') next('route')
+  // otherwise pass the control to the next middleware function in this stack
+  else next()
+}, (req, res, next) => {
+  // send a regular response
+  res.send('regular')
+})
+
+// handler for the /user/:id path, which sends a special response
+app.get('/user/:id', (req, res, next) => {
+  res.send('special')
 })
 
 
