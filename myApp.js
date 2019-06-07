@@ -398,4 +398,29 @@ app.route('/name')
 
 
 
+//This route uses a request parameter to eventually respond with a JSON. The handler tests the parameter before
+//assigning an in-scope variable to a new Date object that is either the current date or a date set from the
+//parameter which may be parsed as an integer depending on if it contained any non-number characters to begin
+//with. Finally, the hadler responds with JSON that is set according to the value of the in-scope variable.
+app.get("/api/timestamp/:date?", (req, res) => {
+  let date;
+  if (req.params.date !== undefined) {
+    if (isNaN(req.params.date)) {
+      date = new Date(req.params.date);
+    } else {
+      date = new Date(parseInt(req.params.date));
+    }
+  } else {
+    date = new Date(Date.now());
+  }
+  var response = date == "Invalid Date" ?
+      { error: "Invalid Date" } :
+      {
+        "unix": date.getTime(),
+        "utc": date.toUTCString()
+      };
+  res.json(response);
+});
+
+
 app.listen(3000, () => {console.log('app is listening on port 3000')});
