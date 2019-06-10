@@ -4,10 +4,11 @@ This file explores the basics of Node and Express.
 
 
 
-Node.js: Node.js is a JavaScript tool that allows developers to write backend (server-side) programs in
+NODE.JS: Node.js is a JavaScript tool that allows developers to write backend (server-side) programs in
 JavaScript. Node.js comes with built-in modules (small, independent programs) that help facilitate this
 purpose.
-Some of the core built-in modules are:
+
+Core built-in modules:
 
 http: a module that acts as a server.
 
@@ -59,7 +60,7 @@ EX:
 app.use((req, res, next) => {...; next()}, (req, res, next) {...; next()});
 
 
-Express built in middleware methods:
+Built in middleware methods:
 
 express.static: Serves static files.
 Syntax: express.static(root, [options])
@@ -78,7 +79,7 @@ Syntax: express.Router([options]);
 
 
 
-App object: The app object conventionally denotes the Express application.
+APP OBJECT: The app object conventionally denotes the Express application.
 
 App Methods:
 
@@ -109,7 +110,9 @@ middleware. app.route() can avoid duplicate route names (and thus typo errors).
 Syntax: app.route(path);
 
 
+
 ROUTING: Routing refers to how an application's endpoints (URIs) respond to client requests.
+
 
 Routing Methods: Routing methods route http requests. There are many, but the most common are get and post.
 These routing methods specify a callback (handler functions) called when the application recieves a request
@@ -124,11 +127,14 @@ Syntax: app.get(PATH, HANDLER) or app.get(path, callback)
 app.post(): Routes HTTP POST requests to the specified path with the specified callback functions.
 Syntax: app.post(path, callback [, callback ...]);
 
+
 Route Paths: Route paths, in combination with a request method, define the endpoints at which requests can
 be made.
 
+
 Route handlers: Route handler functions are middleware called when a route method's PATH is matched and take
 a request object and response object as parameters.
+
 
 Route Parameters: Route parameters are named URL segments that are used to capture the value specified at their
 positon in the URL. The captured values are populated in the req.params object, with the name of the route
@@ -139,8 +145,10 @@ Request URL: http://localhost:3000/users/1/names/oscar
 req.params: {"userId": "1", "name": "oscar"}
 
 
-Request object (req): the req object represents the HTTP request and has properties for the request query
+
+REQUEST OBJECT (req): the req object represents the HTTP request and has properties for the request query
 string, parameters, body, HTTP headers, etc.
+
 
 Request object properties:
 
@@ -165,8 +173,10 @@ req.method: Contains a string corresponding to the HTTP method of the request: G
 req.path: Contains the path part of the request URL.
 
 
-Response Object (res): The res object represents the HTTP response that an Express app sends when it gets an
+
+RESPONSE OBJECT (res): The res object represents the HTTP response that an Express app sends when it gets an
 HTTP request.
+
 
 Response object methods:
 
@@ -185,8 +195,7 @@ NOTE: this method comes from Node core (response.end() method fo http.ServerResp
 
 
 
-
-body-parser: Body parser is a middleware that parses incoming request bodies before handlers, and makes them 
+BODY PARSER: Body parser is a middleware that parses incoming request bodies before handlers, and makes them 
 available under the req.body property. This packaage has 4 middlewares which parse JSON, raw, text, and
 URL-encoded form. Body parser basically intercepts these types of request bodies and parses them before
 populating the req.body property with the result for access within routes. The req.body property would not
@@ -212,7 +221,7 @@ app.use(express.json())
 
 
 
-
+COMMON TASKS:
 
 Creating an Express app object: After requiring or importing express, an Express app object can be created
 by setting a variable to an instance of express().
