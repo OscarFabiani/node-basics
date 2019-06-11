@@ -22,6 +22,7 @@ mongoose.connect(process.env.MONGO_URI);
 
 
 
+//This creates a Schema
 var personSchema = new mongoose.Schema({
   name: {type: String, required: true},
   age: Number,
@@ -29,11 +30,13 @@ var personSchema = new mongoose.Schema({
 });
 
 
+
+//This creates a Model.
 var Person = mongoose.model('Person', personSchema);
 
-//console.log(Person);
 
 
+//This is an instance of a model (document).
 var oscar = new Person({
   name: 'Oscar',
   age: 31,
@@ -41,6 +44,8 @@ var oscar = new Person({
 })
 
 
+
+//Uses Document.save()
 var createAndSavePerson = function(done) {
   oscar.save(function(err, data) {
     if (err) {
@@ -50,10 +55,9 @@ var createAndSavePerson = function(done) {
   })
 };
 
-console.log(oscar);
 
 
-
+//Uses Model.create()
 var createManyPeople = function(arrayOfPeople, done) {
   Person.create(arrayOfPeople, function(err, data) {
     if (err) {
@@ -65,6 +69,7 @@ var createManyPeople = function(arrayOfPeople, done) {
 
 
 
+//Uses Model.find()
 var findPeopleByName = function(personName, done) {
   Person.find({name: personName}, function(err, data) {
     if (err) {
@@ -76,6 +81,7 @@ var findPeopleByName = function(personName, done) {
 
 
 
+//Uses Model.findOne()
 var findOneByFood = function(food, done) {
   Person.findOne({favoriteFoods: [food]}, function(err, data) {
     if (err) {
@@ -87,6 +93,7 @@ var findOneByFood = function(food, done) {
 
 
 
+//Uses Model.fildById()
 var findPersonById = function(personId, done) {
   Person.findById({_id: personId}, function(err, data) {
     if (err) {
@@ -98,6 +105,7 @@ var findPersonById = function(personId, done) {
 
 
 
+//Uses Model.findById and Document.save()
 var findEditThenSave = function(personId, done) {
   var foodToAdd = 'hamburger';
   Person.findById({_id: personId}, function(err, data) {
@@ -116,6 +124,7 @@ var findEditThenSave = function(personId, done) {
 
 
 
+//Uses Model.findOneAndUpdate()
 var findAndUpdate = function(personName, done) {
   var ageToSet = 20;
   Person.findOneAndUpdate({name: personName}, {age: ageToSet}, {new: true}, function(err, data) {
@@ -128,6 +137,7 @@ var findAndUpdate = function(personName, done) {
 
 
 
+//Uses Model.findOneAndRemove()
 var removeById = function(personId, done) {
   Person.findOneAndRemove({_id: personId}, function(err, data) {
     if (err) {
@@ -139,6 +149,7 @@ var removeById = function(personId, done) {
 
 
 
+//Uses Model.remove()
 var removeManyPeople = function(done) {
   var nameToRemove = "Mary";
   Person.remove({name: nameToRemove}, function(err, data) {
@@ -172,3 +183,7 @@ var queryChain = function(done) {
     return done(null, data);
   });
 };
+
+
+//WRITE NOTES FOR ALL EXAMPLES,  SET UP LOCAL ENVIRONMENT FOR TESTING, WRITE PERSONAL DOCUMENTATION FOR MONGOOSE,
+//EXPLORE MONGO WITHOUT MONGOOSE.
