@@ -113,3 +113,15 @@ var findEditThenSave = function(personId, done) {
     })
   })
 };
+
+
+
+var findAndUpdate = function(personName, done) {
+  var ageToSet = 20;
+  Person.findOneAndUpdate({name: personName}, {age: ageToSet}, {new: true}, function(err, data) {
+    if (err) {
+      return done(err);
+    }
+    return done(null, data);
+  })
+};
