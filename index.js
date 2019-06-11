@@ -125,3 +125,14 @@ var findAndUpdate = function(personName, done) {
     return done(null, data);
   })
 };
+
+
+
+var removeById = function(personId, done) {
+  Person.findOneAndRemove({_id: personId}, function(err, data) {
+    if (err) {
+      return done(err);
+    }
+    return done(null, data);
+  })
+};
