@@ -148,3 +148,27 @@ var removeManyPeople = function(done) {
     return done(null, data);
   })
 };
+
+
+
+//This chains the Model.find() method with multiple Query methods by ommitting a callback for the find()
+//method which returns the query to be used. The Model.find() method filters documents that have a
+//favoriteFoods property that includes 'burrito' (in this case, the property is an array of strings
+//and filtering 'burrito' checks if the array contains 'burrito' as one of its items). The Query.sort()
+//method sorts the documents the query will return by name in ascending order. The Query.limit() method
+//limits the number of documents the query will return to 2. The Query.select() method excludes the age
+//field from the documents the query will return. Finally, the Query.exec() executes the query and is
+//passed a callback like the initial Model.find() method could have included as a second parameter.
+var queryChain = function(done) {
+  var foodToSearch = "burrito";
+  Person.find({favoriteFoods: foodToSearch})
+    .sort({name: 'asc'})
+    .limit(2)
+    .select({age: 0})
+    .exec(function(err, data) {
+    if (err) {
+      return done(err);
+    }
+    return done(null, data);
+  });
+};
