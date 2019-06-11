@@ -136,3 +136,15 @@ var removeById = function(personId, done) {
     return done(null, data);
   })
 };
+
+
+
+var removeManyPeople = function(done) {
+  var nameToRemove = "Mary";
+  Person.remove({name: nameToRemove}, function(err, data) {
+    if (err) {
+      return done(err);
+    }
+    return done(null, data);
+  })
+};
