@@ -25,9 +25,91 @@ mongoose.connect(process.env.MONGO_URI);
 var personSchema = new mongoose.Schema({
   name: {type: String, required: true},
   age: Number,
-  favoriteFoods: Array
+  favoriteFoods: [String]
 });
+
 
 var Person = mongoose.model('Person', personSchema);
 
-console.log(Person);
+//console.log(Person);
+
+
+var oscar = new Person({
+  name: 'Oscar',
+  age: 31,
+  favoriteFoods: ['eggs', 'beans']
+})
+
+
+var createAndSavePerson = function(done) {
+  oscar.save(function(err, data) {
+    if (err) {
+      return done(err);
+    }
+    return done(null, data);
+  })
+};
+
+console.log(oscar);
+
+
+
+var createManyPeople = function(arrayOfPeople, done) {
+  Person.create(arrayOfPeople, function(err, data) {
+    if (err) {
+      return done(err);
+    }
+    return done(null, data)
+  })
+};
+
+
+
+var findPeopleByName = function(personName, done) {
+  Person.find({name: personName}, function(err, data) {
+    if (err) {
+      return done(err);
+    }
+    return done(null, data);
+  })
+};
+
+
+
+var findOneByFood = function(food, done) {
+  Person.findOne({favoriteFoods: [food]}, function(err, data) {
+    if (err) {
+      return done(err);
+    }
+    return done(null, data);
+  })
+};
+
+
+
+var findPersonById = function(personId, done) {
+  Person.findById({_id: personId}, function(err, data) {
+    if (err) {
+      return done(err);
+    }
+    return done(null, data);
+  })
+};
+
+
+
+var findEditThenSave = function(personId, done) {
+  var foodToAdd = 'hamburger';
+  Person.findById({_id: personId}, function(err, data) {
+    if (err) {
+      return done(err);
+    }
+    data.favoriteFoods.push(foodToAdd);
+    data.save(function(err, data) {
+      if (err) {
+        return done(err);
+      }
+      return done(null, data);
+    })
+  })
+};
