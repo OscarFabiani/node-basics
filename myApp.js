@@ -289,6 +289,7 @@ app.use((req, res, next) => {
   next();
 });
 
+//This is used to parse instead of body-parser
 app.use(express.urlencoded({extended: false}));
 
 //app.get('/', function (req, res) {
