@@ -151,6 +151,49 @@ app.get("/api/hello", function (req, res) {
 });
 
 
+//COMPARE WITH EXAMPLE AND OPTIMIZE (POSSIBLY ELIMINATE URL MODULE)
+app.route("/api/shorturl/new")
+.post(function(req, res) {
+  var url = req.body.url;
+  if (!url.match(/^https?:\/\/..*/i)) {
+    res.json({error: "Invalid URL"});
+  } else {
+    var href = new URL(url);
+    dns.lookup(href.hostname, function(err) {
+      if (err) {
+        res.json({error: "Invalid Hostname"});
+      } else {
+        Url.find({original_url: url}, function(err, docs) {
+          if (err) {console.log('err2: ' + err)};
+          if (docs == '') {
+            Url.countDocuments(function(err, count) {
+              if (err) {console.log('err1: ' + err)};
+              console.log('count: ' + count);
+              var doc = {original_url: url, short_url: count + 1};
+              new Url(doc)
+              .save(function (err, newDoc) {
+                if (err) { console.log('err3: ' + err)};
+                console.log('newDoc: ' + newDoc);
+                console.log('doc:');
+                console.log(doc);
+                res.json(doc);
+              })
+            })
+          } else {
+            console.log('already exists: ' + docs);
+            var doc = {original_url: url, short_url: docs[0].short_url};
+            console.log('doc:');
+            console.log(doc);
+            res.json(doc);
+          }
+        })
+      }
+    })
+  }
+})
+
+
+/*
 app.route("/api/shorturl/new")
 .post(function(req, res) {
   var url = req.body.url;
@@ -179,6 +222,7 @@ app.route("/api/shorturl/new")
     }
   })
 })
+*/
 
 
 /*
@@ -234,13 +278,6 @@ app.route("/api/shorturl/:short")
 })
 });
 
-
-//TRY THIS FOR A SEC BEFORE LOOKING UP SOLUTION
-dns.lookup('nodejs.org', function(err, address, family) {
-  if (err) {console.log(err)};
-  console.log(address);
-  
-})
 
 
 app.listen(port, function () {
