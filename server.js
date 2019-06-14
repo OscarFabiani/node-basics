@@ -154,6 +154,37 @@ app.get("/api/hello", function (req, res) {
 app.route("/api/shorturl/new")
 .post(function(req, res) {
   var url = req.body.url;
+  Url.find({original_url: url}, function(err, docs) {
+    if (err) {console.log('err2: ' + err)};
+    if (docs == '') {
+      Url.countDocuments(function(err, count) {
+        if (err) {console.log('err1: ' + err)};
+        console.log('count: ' + count);
+        var doc = {original_url: url, short_url: count + 1};
+        new Url(doc)
+        .save(function (err, newDoc) {
+          if (err) { console.log('err3: ' + err)};
+          console.log('newDoc: ' + newDoc);
+          console.log('doc:');
+          console.log(doc);
+          res.json(doc);
+        })
+      })
+    } else {
+      console.log('already exists: ' + docs);
+      var doc = {original_url: url, short_url: docs[0].short_url};
+      console.log('doc:');
+      console.log(doc);
+      res.json(doc);
+    }
+  })
+})
+
+
+/*
+app.route("/api/shorturl/new")
+.post(function(req, res) {
+  var url = req.body.url;
   var doc = {
     original_url: url,
     short_url: 0
@@ -184,13 +215,8 @@ app.route("/api/shorturl/new")
       }
     })
   })
-  /*
-  res.json({
-    original_url: url,
-    short_url: 'test'
-  });
-  */
 })
+*/
 
 
 app.route("/api/shorturl/:short")
