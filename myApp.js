@@ -22,12 +22,19 @@ assert (Assertion Testing): a module that checks code against prescribed constra
 Node.js Global Objects: objects that are available in all modules.
 
 __dirname: The direstory name of the current module.
+NOTE: this is used similarly to process.cwd() but is slightly different.
 
 process: provides information about, and control over the current Node.js process.
 
 process properties:
 
 process.env: The process.env property returns an object containing the user environment.
+
+process methods:
+
+process.cwd(): returns the current working directory of the Node.js process.
+NOTE: this is used similarly to __dirname but is slightly different.
+
 
 
 ---
