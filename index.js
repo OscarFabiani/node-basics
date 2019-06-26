@@ -1,6 +1,6 @@
 /*
 
-This file explores the basics of MongoDB
+This file explores the basics of MongoDB and Mongoose.
 
 MONGODB: MongoDB is a database that stores data records (documents) for use by an application.
 Mongo is a non-relational, "NoSQL" database. This means Mongo stores all data associated within
