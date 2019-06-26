@@ -12,5 +12,12 @@
     "express": "^4.17.1",
     "mongodb": "^3.2.7",
     "mongoose": "^5.5.14"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/OscarFabiani/node-basics.git"
   }
 }
