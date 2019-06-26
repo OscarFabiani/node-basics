@@ -1,7 +1,7 @@
 {
-  "name": "node-basics",
+  "name": "node-mongodb-basics",
   "version": "1.0.0",
-  "description": "A test project for Node.js basics",
+  "description": "A test project for Node.js and MongoDB basics",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
