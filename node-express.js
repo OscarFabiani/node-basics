@@ -283,7 +283,6 @@ app.get('/name', (req, res) => {
 //import express from 'express';
 const express = require('express');
 const app = express();
-//const bodyParser = require('body-parser');
 
 
 
@@ -299,9 +298,6 @@ app.use((req, res, next) => {
 //This is used to parse instead of body-parser
 app.use(express.urlencoded({extended: false}));
 
-//app.get('/', function (req, res) {
-  //res.send('Hello World')
-//})
 
 //app.get("/",(req, res) => {res.send("Hello Express")});
 
