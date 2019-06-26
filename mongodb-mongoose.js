@@ -1,4 +1,4 @@
-/*
+  /*
 
 This file explores the basics of MongoDB and Mongoose.
 
