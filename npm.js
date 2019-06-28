@@ -73,3 +73,6 @@ npm root: lists the path of the node_modules folder
 
 
 */
+
+
+//ADD NOTES FOR LOCAL VS GLOBAL INSTALLS AND NPX

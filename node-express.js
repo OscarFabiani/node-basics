@@ -420,7 +420,7 @@ app.route('/name')
 //This route uses a request parameter to eventually respond with a JSON. The handler tests the parameter before
 //assigning an in-scope variable to a new Date object that is either the current date or a date set from the
 //parameter which may be parsed as an integer depending on if it contained any non-number characters to begin
-//with. Finally, the hadler responds with JSON that is set according to the value of the in-scope variable.
+//with. Finally, the handler responds with JSON that is set according to the value of the in-scope variable.
 app.get("/api/timestamp/:date?", (req, res) => {
   let date;
   if (req.params.date !== undefined) {
