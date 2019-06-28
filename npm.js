@@ -71,6 +71,24 @@ npm list||la||ll: lists installed packages
 npm root: lists the path of the node_modules folder
 
 
+Global vs Local installations:
+
+After some research, I have found that it is a good idea to install most packages locally. The main reason for this looks to
+be that if I install a package globally that a project requires, this will inevitably conflict with another project which
+requires a different version of said package. Furthermore, this issue is extended to anyone who downloads my package. These
+concerns mostly regard packages who use CLI commands and are useful in a general cross-project sense. Still, with the advent
+of npx, the benefits of glabally installing even these (most notably the ability to easily call CLI commands) has seemingly
+been almost reduced to zero. 
+
+NPX: npx is a cli tool that is included with npm as of version 5.2. It allows the execution on package commands without the
+need to have said package installed. The package will be search for in the local node_modules folder, then the global
+node_modules folder. If it is not found, the package will be temporarily installed for execution before it is deleted.
+This is particularly useful for large packages that are run infrequently such as create-react-app as well as running
+local packages without referencing node_modules/.bin as one typically would when running local packages. 
+
+
+
+
 
 */
 
