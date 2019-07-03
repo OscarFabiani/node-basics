@@ -91,6 +91,3 @@ local packages without referencing node_modules/.bin as one typically would when
 
 
 */
-
-
-//ADD NOTES FOR LOCAL VS GLOBAL INSTALLS AND NPX

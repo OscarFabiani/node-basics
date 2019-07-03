@@ -4,7 +4,6 @@
   "description": "A test project for Node.js and MongoDB basics",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "devserver": "nodemon node-express.js"
   },
   "author": "Oscar Fabiani",
